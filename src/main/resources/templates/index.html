@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">  
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+ integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <style>
+        input[type=file]{
+            margin: auto;
+        }
+        #img{
+            display: block;
+            margin: auto;
+            color: black;
+        }
+        #preview {
+            width: 100px;
+            height: 100px;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+
+    <h1 class="text-center text-primary">Student Form</h1>
+  <div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6 bg-light">
+            <form class="mt-4" th:action="@{/student}" th:object="${student}" method="post" enctype="multipart/form-data">
+                <div class="row my-2">
+                    <div class="col-4"></div>
+                    <div class="col-4 mx-4">
+                        <div id="preview">
+                            <p class="text-center my-4 " style="opacity: 0.5;">no photo</p>
+                        </div>
+                        <input type="file" name="file" id="file" path="file"
+                               accept="image/*" onchange="getImage(event)"
+                               hidden >
+                        <label for="file" id="img" class="form-label my-1" style="opacity: 0.5;">Choose Photo</label>
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="form-row">
+                    <div class="col-6">
+                            <div class="form-group row">
+                                <label  class="col-sm-4 col-form-label">Id</label>
+                                <div class="col-sm-6">
+                                  <input type="text" class="form-control" th:field="*{id}">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-6 px-3 py-2">
+                        <div class="form-group row">
+                            <label class="form-label ms-3">Gender </label>
+                            <input type="radio" th:field="*{gender}" value="Male"  class="mx-3" required/>
+                            <label class="form-check-label">Male</label>
+                            <input type="radio" th:field="*{gender}" value="Female" class="mx-3" required/>
+                            <label class="form-check-label">Female</label>
+                        </div>  
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label">Name</label>
+                            <div class="col-sm-6">
+                              <input type="text" class="form-control" th:field="*{name}" required>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label">BirthDate</label>
+                            <div class="col-sm-8">
+                              <input type="date" class="form-control"  th:field="*{db}" required>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label">NRC</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control"  placeholder="1/MaMaTa(N)12345" th:field="*{nrc}" required>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label">Township</label>
+                            <div class="col-sm-8">
+                                <select class="custom-select my-1 mr-sm-2"  th:field="*{city}" autocomplete="off" required>
+
+                                    <option th:value="NONE" style="display: none">Choose Township</option>
+                                    <option th:value="Yangon"> Yangon</option>
+                                    <option th:value="Mandalay">Mandalay</option>
+                                    <option th:value="Naypyidaw" >NayPyiDaw</option>
+
+                                  </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label" >Address</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control"   th:field="*{address}" required>
+                            </div>
+                        </div>
+                </div>
+                </div>
+
+
+                <div class="form-row mb-2">
+                    <label for="" class="col-sm-2 col-form-label">Interesting </label>
+
+                    <div class="form-check form-check-inline">
+                    <th:block th:each = "interest : ${listInterest}">
+
+                            <input type="checkbox" class="form-check-input mx-3"
+                                   th:text="${interest.name}"
+                                   th:value="${interest.id}"
+                                   th:field="*{interest}"/>
+                    </th:block>
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Remark</label>
+                            <div class="col-sm-10">
+                                <textarea name="" id="" cols="58" rows="3" th:field="*{remark}"></textarea>
+                            </div>
+                        </div>
+                </div>
+                </div>
+                <hr>
+                <div class="sec-gp-test">
+                    <div class="sec-tb">
+                        <table id="sec-tab">
+                            <thead class="sec-tb-head">
+                            <tr class="form-group col-lg-2 col-md-2 sec-form">
+                                <th class="sec-label">Subject</th>
+                                <th class="sec-label">Mark</th>
+                                <th class="sec-label">Grade</th>
+                                <th class="sec-label">Year</th>
+                                <th class="sec-label col-lg-3 td-btn"><button name="add" id="tbAdd" class="btn btn-primary sec-btn">Add</button></th>
+                            </tr>
+                            </thead>
+                            <tbody id="sec-tb-body" class="sec-tb-body">
+                            <tr class="form-group" id="tb-options">
+                                <td class="sec-td">
+                                    <input type="text" name="subject" class="form-control sec-text" placeholder="Subject" required/>
+                                </td>
+                                <td class="sec-td">
+                                    <input type="text" name="mark" class="form-control sec-text" placeholder="Mark" required/>
+                                </td>
+                                <td class="sec-td">
+                                    <input type="text" name="grade" class="form-control sec-text" placeholder="Grade" required/>
+                                </td>
+                                <td class="sec-td">
+                                    <input type="text" name="year" class="form-control sec-text" placeholder="year" required/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm float-right mx-2 my-3">Save student</button>
+                <a th:href="@{/students}" class="btn btn-success btn-sm float-right my-3">Show Students</a>
+
+            </form>
+              
+        </div>
+        <div class="col-3"></div>
+    </div>
+  </div>
+
+    <script src="./src/main/resources/static/js/student.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <script>
+
+        const inputBd = document.getElementById('sec-tb-body');
+        const trRow = document.getElementById('tb-options');
+        const addBtn = document.getElementById('tbAdd');
+
+        $(document).on('click','#reset-btn',function (){
+            document.getElementById('form-stud').reset();
+        });
+
+        $(document).ready( function (){
+            $('#fileImage').change(function (){
+                showImageThumbnail(this);
+            });
+        });
+
+        function showImageThumbnail(fileInput){
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e){
+                $('#thumbnail').attr('src',e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+
+        $(document).ready(function (){
+            const removeTd = document.createElement('td');
+            removeTd.className = "col-lg-3 td-btn";
+            trRow. appendChild(removeTd);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = "btn sec-btn btn-danger remove";
+            removeBtn.innerHTML = "Remove";
+            removeTd.appendChild(removeBtn);
+
+        });
+
+        $(document).on('click','#tbAdd',function (){
+            const trRow = document.createElement('tr');
+            trRow.id = "tb-options";
+            trRow.className = "form-group";
+            inputBd.appendChild(trRow);
+
+            const newTd1 = document.createElement('td');
+            newTd1.className = "sec-td";
+            trRow.appendChild(newTd1);
+
+            const newTd2 = document.createElement('td');
+            newTd2.className = "sec-td";
+            trRow.appendChild(newTd2);
+
+            const newTd3 = document.createElement('td');
+            newTd3.className = "sec-td";
+            trRow.appendChild(newTd3);
+
+            const newTd4 = document.createElement('td');
+            newTd4.className = "sec-td";
+            trRow.appendChild(newTd4);
+
+            const newInput1 = document.createElement('input');
+            newInput1.className = "form-control sec-text";
+            newInput1.type = "text";
+            newInput1.name = "subject";
+            newInput1.required = true;
+            newInput1.placeholder = "Subject";
+            newTd1.appendChild(newInput1);
+
+            const newInput2 = document.createElement('input');
+            newInput2.className = "form-control sec-text";
+            newInput2.type = "text";
+            newInput2.name = "mark";
+            newInput2.required = true;
+            newInput2.placeholder = " Mark";
+            newTd2.appendChild(newInput2);
+
+            const newInput3 = document.createElement('input');
+            newInput3.className = "form-control sec-text";
+            newInput3.type = "text";
+            newInput3.name = "grade";
+            newInput3.required = true;
+            newInput3.placeholder = " Grade";
+            newTd3.appendChild(newInput3);
+
+            const newInput4 = document.createElement('input');
+            newInput4.className = "form-control sec-text";
+            newInput4.type = "text";
+            newInput4.name = "year";
+            newInput4.required = true;
+            newInput4.placeholder = " Year";
+            newTd4.appendChild(newInput4);
+
+            const removeTd = document.createElement('td');
+            removeTd.className = "col-lg-3 td-btn";
+            trRow. appendChild(removeTd);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = "btn sec-btn btn-danger remove";
+            removeBtn.innerHTML = "Remove";
+            removeTd.appendChild(removeBtn);
+
+            return false;
+
+        });
+
+        $(document).on('click', '.remove', function () {
+            const trIndex = $(this).closest('#tb-options').index();
+            if (trIndex > trIndex - 1) {
+                $(this).closest('#tb-options').remove();
+            } else {
+                alert("Sorry ! Can't remove first row");
+            }
+        });
+
+        $('#save-btn').on('click',function (){
+            this._activate();
+        });
+
+
+
+
+    </script>
+</body>
+</html>
